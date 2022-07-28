@@ -1,0 +1,2 @@
+INDEX VERSION 1.131+C:\Priyanka\workspace-spring-tool-suite-4-4.14.1.RELEASE\BookRecommendationApp\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
