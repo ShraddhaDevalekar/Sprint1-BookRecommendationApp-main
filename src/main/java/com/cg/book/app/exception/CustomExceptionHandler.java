@@ -72,7 +72,25 @@ public class CustomExceptionHandler {
 		ResponseEntity<Object> response = new ResponseEntity<>(null, headers, HttpStatus.OK);
 		return response;
 	}
-	
+	@ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<Object> handleCategoryNotFoundException(CategoryNotFoundException e) {
+        String exceptionMessage = e.getMessage();
+        LOG.error(exceptionMessage);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("exceptionMessage", exceptionMessage);
+        ResponseEntity<Object> response = new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
+        return response;
+    }
+
+    @ExceptionHandler(CategoryAlreadyExistsException.class)
+    public ResponseEntity<Object> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException e) {
+        String exceptionMessage = e.getMessage();
+        LOG.error(exceptionMessage);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("exceptionMessage", exceptionMessage);
+        ResponseEntity<Object> response = new ResponseEntity<>(null, headers, HttpStatus.OK);
+        return response;
+    }
 	
 
 }

@@ -41,7 +41,7 @@ public class BookServiceImpl implements BookService {
 				throw new BookAlreadyExistsException(exceptionMessage);
 			} else {
 				LOG.info("List returned successfully.");
-				return bookRepository.save(b);
+				return bookRepository.save(book);
 			}
 
 		}

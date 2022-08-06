@@ -27,7 +27,9 @@ import com.cg.book.app.service.CategoryService;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
+
+
 public class AdminController {
 
 	@Autowired
@@ -38,13 +40,23 @@ public class AdminController {
 
 	@Autowired
 	private CategoryService categoryService;
-
+	
+/************************************************************************************
+	 * Method: get-all-books 
+	 * Description: It is used to view all books from books table /
+*************************************************************************************/
+	
 	@GetMapping("/get-all-books")
 	public List<Book> getBooks() {
 		List<Book> allBookList = (List<Book>) bookService.getAllBooks();
 		return allBookList;
 	}
 
+/************************************************************************************
+	 * Method: get-book-by-id 
+	 * Description: It is used to view the book by id from books table /
+*************************************************************************************/
+	
 	@GetMapping("/get-book-by-id/{id}")
 	public ResponseEntity<Book> getBookByid(@PathVariable("id") int id) {
 		Book book = bookService.getBookById(id);
@@ -53,7 +65,12 @@ public class AdminController {
 		}
 		return ResponseEntity.of(Optional.of(book));
 	}
-
+	
+/************************************************************************************
+	 * Method: get-book-by-name 
+	 * Description: It is used to view books by book name from books table /
+*************************************************************************************/
+	
 	@GetMapping("/get-book-by-name/{name}")
 	public ResponseEntity<Book> getBookByName(@PathVariable("name") String name) {
 		Book book = bookService.getBookByName(name);
@@ -62,6 +79,11 @@ public class AdminController {
 		}
 		return ResponseEntity.of(Optional.of(book));
 	}
+	
+/************************************************************************************
+	 * Method: add-book 
+	 * Description: It is used to add the books to books table /
+*************************************************************************************/
 
 //	@SuppressWarnings("null")
 	@PostMapping(value = "/add-book")
@@ -69,12 +91,17 @@ public class AdminController {
 
 		Book b = bookService.addBook(book);
 		if (b != null) {
-			return new ResponseEntity<Book>(b, HttpStatus.CREATED);
+			return new ResponseEntity<Book>(b,  HttpStatus.CREATED);
 
 		}
 		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 	}
 
+/************************************************************************************
+	 * Method: updateBookById 
+	 * Description: It is used to update the books by id in books table /
+*************************************************************************************/
+	
 	@PutMapping("/updateBookById/{id}")
 	public Book updateBookById(@PathVariable("id") int id, @RequestBody Book book) {
 
@@ -95,7 +122,7 @@ public class AdminController {
 		if (book.getCategory() != null) {
 			Category c = new Category();
 			c.setCategoryId(book.getCategory().getCategoryId());
-			c.setCategory(book.getCategory().getCategory());
+			c.setCategoryName(book.getCategory().getCategoryName());
 			b.setCategory(book.getCategory());
 		}
 
@@ -111,6 +138,11 @@ public class AdminController {
 		return updatedBook;
 	}
 
+/************************************************************************************
+	 * Method: deleteBookById 
+	 * Description: It is used to delete the book by id from books table /
+*************************************************************************************/
+
 	// @SuppressWarnings("null")
 	@DeleteMapping("/deleteBookById/{id}")
 	public Map<String, Boolean> deleteBookById(@PathVariable("id") int id) {
@@ -121,17 +153,27 @@ public class AdminController {
 		res.put("Deleted", true);
 		return res;
 	}
-
+/************************************************************************************
+	 * Method: deleteAuthorById 
+	 * Description: It is used to delete the author by id from author table /
+*************************************************************************************/	
+	
 	// @SuppressWarnings("null")
-	@DeleteMapping("/deleteAuthorById/{id}")
-	public Map<String, Boolean> deleteAuthorById(@PathVariable("id") int id) {
+		@DeleteMapping("/deleteAuthorById/{id}")
+		public Map<String, Boolean> deleteAuthorById(@PathVariable("id") int id) {
 
-		authorService.deleteAuthor(id);
+			authorService.deleteAuthor(id);
 
-		Map<String, Boolean> result = new HashMap<String, Boolean>();
-		result.put("Deleted", true);
-		return result;
-	}
+			Map<String, Boolean> res = new HashMap<String, Boolean>();
+			res.put("Deleted", true);
+			return res;
+		}
+
+	
+/************************************************************************************
+	 * Method: addAuthor
+	 * Description: It is used to add the authors in author table /
+*************************************************************************************/
 
 //	@SuppressWarnings("null")
 	@PostMapping(value = "/addAuthor")
@@ -139,11 +181,16 @@ public class AdminController {
 
 		Author a = authorService.addAuthor(author);
 		if (a != null) {
-			return new ResponseEntity<Author>(a, HttpStatus.CREATED);
+			return new ResponseEntity<Author>(a,  HttpStatus.CREATED);
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 		}
 	}
+	
+/************************************************************************************
+	 * Method: get-author-by-id 
+	 * Description: It is used to view authors by id from author table /
+*************************************************************************************/
 
 	@GetMapping("/get-author-by-id/{id}")
 	public ResponseEntity<Author> getAuthorById(@PathVariable(name = "id") int id) {
@@ -155,6 +202,11 @@ public class AdminController {
 		return ResponseEntity.of(Optional.of(author));
 	}
 
+/************************************************************************************
+	 * Method: get-author-by-name 
+	 * Description: It is used to view all authors by name from author table /
+*************************************************************************************/
+	
 	@GetMapping("/get-author-by-name/{name}")
 	public ResponseEntity<Author> getAuthorByName(@PathVariable(name = "name") String name) {
 
@@ -165,12 +217,22 @@ public class AdminController {
 		return ResponseEntity.of(Optional.of(author));
 	}
 
+/************************************************************************************
+	 * Method: get-all-authors 
+	 * Description: It is used to view all authors from author table /
+*************************************************************************************/	
+
 	@GetMapping("/get-all-authors")
 	public List<Author> getAuthors() {
 		List<Author> allAuthorList = (List<Author>) authorService.getAllAuthors();
 		return allAuthorList;
 	}
 
+/************************************************************************************
+	 * Method: addCategory 
+	 * Description: It is used to add category in categories table /
+*************************************************************************************/
+	
 	// @SuppressWarnings("null")
 	@PostMapping(value = "/addCategory")
 	public ResponseEntity<Category> addCategory(@RequestBody Category category) {
@@ -181,7 +243,12 @@ public class AdminController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 	}
-
+	
+/************************************************************************************
+	 * Method: get-all-categories 
+	 * Description: It is used to view all categories from categories table /
+*************************************************************************************/
+	
 	@GetMapping("/getAllCategory")
 	public List<Category> getAllCategory() {
 		List<Category> allCategoryList = (List<Category>) categoryService.getAllCategory();

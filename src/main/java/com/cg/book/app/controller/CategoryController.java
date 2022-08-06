@@ -17,33 +17,31 @@ import com.cg.book.app.service.CategoryService;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:3000")
+ @CrossOrigin(origins = "*")
 
 public class CategoryController {
 
 	@Autowired
 	CategoryService categoryService;
-
-	/********************************************************
+	
+/********************************************************
 	 * Method: getAllCategory
 	 * Description: It is used to view all category in categories table
 	 * Method: AddCategory
 	 * Description:This method is in Admin Controller that is used to Add category in Database.
 ********************************************************/
+
 	// http://localhost:9999/user/get-all-Category
 	@GetMapping("/getAllCategory")
 	public List<Category> getAllCategory() {
 		List<Category> allCategoryList = (List<Category>) categoryService.getAllCategory();
 		return allCategoryList;
 	}
-	
 	/********************************************************
-	 * Method: getcategoryById
+	 * Method: getCategoryById
 	 * Description: It is used to view category in categories table by id
 	 * *********************************************************/
-	
-	
-	
+
 	@GetMapping("/get-category-by-id/{id}")
 	public ResponseEntity<Category> getCategoryById(@PathVariable(name = "id") int id) {
 
@@ -53,4 +51,20 @@ public class CategoryController {
 		}
 		return ResponseEntity.of(Optional.of(category));
 	}
+
+	/***************************************************************************************
+	 * Method: getCategoryByName 
+	 * Description: It is used to view Authors by name from author table 
+****************************************************************************************/
+
+	@GetMapping("/get-category-by-name/{name}")
+	public ResponseEntity<Category> getCategoryByName(@PathVariable(name = "name") String name) {
+
+		Category category = categoryService.getCategoryByName(name);
+		if (category == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.of(Optional.of(category));
+	}
+
 }

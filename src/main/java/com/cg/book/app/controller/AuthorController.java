@@ -15,7 +15,7 @@ import com.cg.book.app.service.AuthorService;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class AuthorController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class AuthorController {
 	 * http://localhost:9999/user/get-author-by-name
 ****************************************************************************************/
 
-	@GetMapping("/get-author-by-name/{name}")
+	@GetMapping("/get-author-by-name/{name}")//get book-by-author-name
 	public ResponseEntity<Author> getAuthorByName(@PathVariable(name = "name") String name) {
 
 		Author author = authorService.getAuthorByName(name);

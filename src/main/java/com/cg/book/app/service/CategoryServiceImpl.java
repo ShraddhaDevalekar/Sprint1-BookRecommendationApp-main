@@ -7,14 +7,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.cg.book.app.exception.CategoryAlreadyExistsException;
 import com.cg.book.app.exception.CategoryNotFoundException;
 import com.cg.book.app.model.Category;
 import com.cg.book.app.repository.CategoryRepository;
 
-
 @Service
 public class CategoryServiceImpl implements CategoryService {
+	
 	private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
@@ -22,21 +22,28 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	@Override
 	public Category addCategory(Category category) {
-		// TODO Auto-generated method stub
-		return categoryRepository.save(category);
+		Category cat = categoryRepository.findCategoryByCategoryName(category.getCategoryName());
+		if (cat != null) {
+			String exceptionMessage = "Category already exist in the database.";
+			LOG.warn(exceptionMessage);
+			throw new CategoryAlreadyExistsException(exceptionMessage);
+		} else {
+			LOG.info("List returned successfully.");
+			return categoryRepository.save(category);
+		}
+
 	}
 
-	@Override
     public List<Category> getAllCategory() {
-        List<Category> category = categoryRepository.findAll();
-        if (category.isEmpty()) {
+        List<Category> categoryList = categoryRepository.findAll();
+        if (categoryList.isEmpty()) {
         	String exceptionMessage = "Category doesnt exist in database";
         	LOG.warn(exceptionMessage);
         	throw new CategoryNotFoundException(exceptionMessage);
         }else {
         	LOG.info("List returned Succesfully.");
         }
-        return category;
+        return categoryList;
     }
 	
 	@Override
@@ -51,5 +58,33 @@ public class CategoryServiceImpl implements CategoryService {
 			return cat;
 		}
 	}
+
+	@Override
+	public void deleteCategory(int id) {
+		// TODO Auto-generated method stub
+		Category cat = categoryRepository.findCategoryByCategoryId(id);
+		if (cat != null) {
+			categoryRepository.deleteById(id);
+		} else {
+			throw new CategoryNotFoundException("Category not found");
+		}
+
+	}
+	
+	@Override
+	public Category getCategoryByName(String name) {
+		Category cat = categoryRepository.findCategoryByCategoryName(name);
+		if (cat == null) {
+			String exceptionMessage = "Category does not exist in the database.";
+			LOG.warn(exceptionMessage);
+			throw new CategoryNotFoundException(exceptionMessage);
+		} else {
+			LOG.info("List returned successfully.");
+			return cat;
+		}
+	}
+
+	
+	
 
 }

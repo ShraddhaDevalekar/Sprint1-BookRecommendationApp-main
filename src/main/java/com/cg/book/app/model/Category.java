@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 public class Category {
 
 	@Id
@@ -21,21 +21,21 @@ public class Category {
 	@Column(name = "category_id")
 	private int categoryId;
 
-	@Column(name = "category")
-	private String category;
+	@Column(name = "category_name")
+	private String categoryName;
 
 	@OneToMany(mappedBy = "category")
 	@JsonIgnoreProperties("category")
 	private List<Book> books;
-
+	
 	public Category() {
 
 	}
 	
-	public Category(int categoryId, String category, List<Book> books) {
+	public Category(int categoryId, String categoryName, List<Book> books) {
         super();
         this.categoryId = categoryId;
-        this.category = category;
+        this.categoryName = categoryName;
         this.books = books;
     }
 
@@ -47,12 +47,12 @@ public class Category {
 		this.categoryId = categoryId;
 	}
 
-	public String getCategory() {
-		return category;
+	public String getCategoryName() {
+		return categoryName;
 	}
 
-	public void setCategory(String category) {
-		this.category = category;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public List<Book> getBooks() {
@@ -65,6 +65,6 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return "Category [categoryId=" + categoryId + ", category=" + category + ", books=" + books + "]";
+		return "Category [categoryId=" + categoryId + ", categoryName=" + categoryName + ", books=" + books + "]";
 	}
 }
